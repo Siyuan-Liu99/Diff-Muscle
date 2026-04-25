@@ -6,7 +6,7 @@
     source  :: https://github.com/MyoHub/MyoSuite
     License :: Under Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 ====================================================== -©vk©-->
-  <compiler angle="radian" meshdir="../myo_sim/" texturedir="../myo_sim/" boundmass="0.001" boundinertia="0.0001" />
+  <compiler angle="radian" meshdir="./" texturedir="./" boundmass="0.001" boundinertia="0.0001" />
 
   <option>
     <flag multiccd="enable"/>
@@ -152,11 +152,11 @@
     <texture type="cube" name="myolegs_tex" builtin="flat" mark="cross" rgb1="1 1 1" rgb2="1 1 1" markrgb="1 0.9 0.9" width="127" height="762"/>
     <texture type="2d" name="texplane" builtin="checker" rgb1="0.2 0.19 0.2" rgb2="0.1 0.11 0.11" width="50" height="50"/>
     <texture type="cube" name="texgeom" builtin="flat" mark="cross" rgb1="0.7 0.7 0.7" rgb2="0.9 0.9 0.9" markrgb="1 1 1" width="127" height="762"/>
-    <texture type="2d" name="textscene" file="../myo_sim/scene/myosuite_scene.png"/>
-    <texture type="2d" name="texfloor" file="../myo_sim/scene/floor0.png"/>
-    <texture type="2d" name="textlogo" file="../myo_sim/scene/myosuite_logo.png"/>
-    <texture type="2d" name="tabletennis_tex" file="../assets/tabletennis.png"/>
-    <texture type="2d" name="paddle_tex" file="../assets/paddle_1k.png"/>
+    <texture type="2d" name="textscene" file="./myo_sim/scene/myosuite_scene.png"/>
+    <texture type="2d" name="texfloor" file="./myo_sim/scene/floor0.png"/>
+    <texture type="2d" name="textlogo" file="./myo_sim/scene/myosuite_logo.png"/>
+    <texture type="2d" name="tabletennis_tex" file="./assets/tabletennis.png"/>
+    <texture type="2d" name="paddle_tex" file="./assets/paddle_1k.png"/>
     <material name="mat_myotorso" texture="tex_myotorso" texuniform="true"/>
     <material name="matskin_myotorso" specular="0.2" shininess="0.1" reflectance="0.5" rgba="0.8 0.7 0.5 0.1"/>
     <material name="mat_myohead" texture="tex_myohead" texuniform="true"/>
@@ -172,126 +172,126 @@
     <material name="tabletennis_mat" texture="tabletennis_tex" specular="0.2" shininess="0.4"/>
     <material name="paddle_mat" texture="paddle_tex" specular="0.2" shininess="0.4"/>
     <material name="floor_mat" rgba="0.3 0 0 1"/>
-    <mesh name="sacrum_geom_1_sacrum" file="../myo_sim/meshes/sacrum.stl"/>
-    <mesh name="lumbar5_geom_1_lumbar5" file="../myo_sim/meshes/lumbar5.stl"/>
-    <mesh name="lumbar4_geom_1_lumbar4" file="../myo_sim/meshes/lumbar4.stl"/>
-    <mesh name="lumbar3_geom_1_lumbar3" file="../myo_sim/meshes/lumbar3.stl"/>
-    <mesh name="lumbar2_geom_1_lumbar2" file="../myo_sim/meshes/lumbar2.stl"/>
-    <mesh name="lumbar1_geom_1_lumbar1" file="../myo_sim/meshes/lumbar1.stl"/>
-    <mesh name="torso_geom_1_thoracic12_s" file="../myo_sim/meshes/thoracic12_s.stl"/>
-    <mesh name="torso_geom_2_thoracic11_s" file="../myo_sim/meshes/thoracic11_s.stl"/>
-    <mesh name="torso_geom_3_thoracic10_s" file="../myo_sim/meshes/thoracic10_s.stl"/>
-    <mesh name="torso_geom_4_thoracic9_s" file="../myo_sim/meshes/thoracic9_s.stl"/>
-    <mesh name="torso_geom_5_thoracic8_s" file="../myo_sim/meshes/thoracic8_s.stl"/>
-    <mesh name="torso_geom_6_thoracic7_s" file="../myo_sim/meshes/thoracic7_s.stl"/>
-    <mesh name="torso_geom_7_thoracic6_s" file="../myo_sim/meshes/thoracic6_s.stl"/>
-    <mesh name="torso_geom_8_thoracic5_s" file="../myo_sim/meshes/thoracic5_s.stl"/>
-    <mesh name="torso_geom_9_thoracic4_s" file="../myo_sim/meshes/thoracic4_s.stl"/>
-    <mesh name="torso_geom_10_thoracic3_s" file="../myo_sim/meshes/thoracic3_s.stl"/>
-    <mesh name="torso_geom_11_thoracic2_s" file="../myo_sim/meshes/thoracic2_s.stl"/>
-    <mesh name="torso_geom_12_thoracic1_s" file="../myo_sim/meshes/thoracic1_s.stl"/>
-    <mesh name="torso_geom_13_ribcage_s" file="../myo_sim/meshes/thorax.stl"/>
-    <mesh name="hat_cervical" file="../myo_sim/meshes/hat_cervical.stl"/>
-    <mesh name="hat_jaw" file="../myo_sim/meshes/hat_jaw.stl"/>
-    <mesh name="hat_skull" file="../myo_sim/meshes/hat_skull.stl"/>
-    <mesh name="r_pelvis" file="../myo_sim/meshes/r_pelvis.stl"/>
-    <mesh name="l_pelvis" file="../myo_sim/meshes/l_pelvis.stl"/>
-    <mesh name="r_femur" file="../myo_sim/meshes/r_femur.stl"/>
-    <mesh name="r_tibia" file="../myo_sim/meshes/r_tibia.stl"/>
-    <mesh name="r_fibula" file="../myo_sim/meshes/r_fibula.stl"/>
-    <mesh name="r_talus" file="../myo_sim/meshes/r_talus.stl"/>
-    <mesh name="r_foot" file="../myo_sim/meshes/r_foot.stl"/>
-    <mesh name="r_bofoot" file="../myo_sim/meshes/r_bofoot.stl"/>
-    <mesh name="r_patella" file="../myo_sim/meshes/r_patella.stl"/>
-    <mesh name="l_femur" file="../myo_sim/meshes/l_femur.stl"/>
-    <mesh name="l_tibia" file="../myo_sim/meshes/l_tibia.stl"/>
-    <mesh name="l_fibula" file="../myo_sim/meshes/l_fibula.stl"/>
-    <mesh name="l_talus" file="../myo_sim/meshes/l_talus.stl"/>
-    <mesh name="l_foot" file="../myo_sim/meshes/l_foot.stl"/>
-    <mesh name="l_bofoot" file="../myo_sim/meshes/l_bofoot.stl"/>
-    <mesh name="l_patella" file="../myo_sim/meshes/l_patella.stl"/>
-    <mesh name="ground_geom_1_thorax" file="../myo_sim/meshes/thorax.stl"/>
-    <mesh name="clavicle_geom_1_clavicle" file="../myo_sim/meshes/clavicle.stl"/>
-    <mesh name="scapula_geom_1_scapula" file="../myo_sim/meshes/scapula.stl"/>
-    <mesh name="humerus_geom_1_humerus" file="../myo_sim/meshes/humerus.stl"/>
-    <mesh name="ulna_geom_1_ulna" file="../myo_sim/meshes/ulna.stl"/>
-    <mesh name="radius_geom_1_radius" file="../myo_sim/meshes/radius.stl"/>
-    <mesh name="proximal_row_geom_1_lunate" file="../myo_sim/meshes/lunate.stl"/>
-    <mesh name="proximal_row_geom_2_sdfastSCAPHOIDw" file="../myo_sim/meshes/scaphoid.stl"/>
-    <mesh name="proximal_row_geom_3_sdfastPISIFORMw" file="../myo_sim/meshes/pisiform.stl"/>
-    <mesh name="proximal_row_geom_4_sdfastTRIQUETRALw" file="../myo_sim/meshes/triquetrum.stl"/>
-    <mesh name="thorax" file="../myo_sim/meshes/thorax.stl"/>
-    <mesh name="clavicle" file="../myo_sim/meshes/clavicle.stl"/>
-    <mesh name="scapula" file="../myo_sim/meshes/scapula.stl"/>
-    <mesh name="humerus" file="../myo_sim/meshes/humerus.stl"/>
-    <mesh name="ulna" file="../myo_sim/meshes/ulna.stl"/>
-    <mesh name="radius" file="../myo_sim/meshes/radius.stl"/>
-    <mesh name="lunate" file="../myo_sim/meshes/lunate.stl"/>
-    <mesh name="scaphoid" file="../myo_sim/meshes/scaphoid.stl"/>
-    <mesh name="pisiform" file="../myo_sim/meshes/pisiform.stl"/>
-    <mesh name="triquetrum" file="../myo_sim/meshes/triquetrum.stl"/>
-    <mesh name="capitate" file="../myo_sim/meshes/capitate.stl"/>
-    <mesh name="trapezium" file="../myo_sim/meshes/trapezium.stl"/>
-    <mesh name="1mc" file="../myo_sim/meshes/1mc.stl"/>
-    <mesh name="thumbprox" file="../myo_sim/meshes/thumbprox.stl"/>
-    <mesh name="thumbdist" file="../myo_sim/meshes/thumbdist.stl"/>
-    <mesh name="trapezoid" file="../myo_sim/meshes/trapezoid.stl"/>
-    <mesh name="hamate" file="../myo_sim/meshes/hamate.stl"/>
-    <mesh name="2mc" file="../myo_sim/meshes/2mc.stl"/>
-    <mesh name="2proxph" file="../myo_sim/meshes/2proxph.stl"/>
-    <mesh name="2midph" file="../myo_sim/meshes/2midph.stl"/>
-    <mesh name="2distph" file="../myo_sim/meshes/2distph.stl"/>
-    <mesh name="3mc" file="../myo_sim/meshes/3mc.stl"/>
-    <mesh name="3proxph" file="../myo_sim/meshes/3proxph.stl"/>
-    <mesh name="3midph" file="../myo_sim/meshes/3midph.stl"/>
-    <mesh name="3distph" file="../myo_sim/meshes/3distph.stl"/>
-    <mesh name="4mc" file="../myo_sim/meshes/4mc.stl"/>
-    <mesh name="4proxph" file="../myo_sim/meshes/4proxph.stl"/>
-    <mesh name="4midph" file="../myo_sim/meshes/4midph.stl"/>
-    <mesh name="4distph" file="../myo_sim/meshes/4distph.stl"/>
-    <mesh name="5mc" file="../myo_sim/meshes/5mc.stl"/>
-    <mesh name="5proxph" file="../myo_sim/meshes/5proxph.stl"/>
-    <mesh name="5midph" file="../myo_sim/meshes/5midph.stl"/>
-    <mesh name="5distph" file="../myo_sim/meshes/5distph.stl"/>
-    <mesh name="meshscene" file="../myo_sim/scene/myosuite_scene_noFloor.msh" scale="0.01 0.01 0.01"/>
-    <mesh name="logo" file="../myo_sim/scene/myosuite_logo.msh" scale="2 2 2"/>
+    <mesh name="sacrum_geom_1_sacrum" file="./myo_sim/meshes/sacrum.stl"/>
+    <mesh name="lumbar5_geom_1_lumbar5" file="./myo_sim/meshes/lumbar5.stl"/>
+    <mesh name="lumbar4_geom_1_lumbar4" file="./myo_sim/meshes/lumbar4.stl"/>
+    <mesh name="lumbar3_geom_1_lumbar3" file="./myo_sim/meshes/lumbar3.stl"/>
+    <mesh name="lumbar2_geom_1_lumbar2" file="./myo_sim/meshes/lumbar2.stl"/>
+    <mesh name="lumbar1_geom_1_lumbar1" file="./myo_sim/meshes/lumbar1.stl"/>
+    <mesh name="torso_geom_1_thoracic12_s" file="./myo_sim/meshes/thoracic12_s.stl"/>
+    <mesh name="torso_geom_2_thoracic11_s" file="./myo_sim/meshes/thoracic11_s.stl"/>
+    <mesh name="torso_geom_3_thoracic10_s" file="./myo_sim/meshes/thoracic10_s.stl"/>
+    <mesh name="torso_geom_4_thoracic9_s" file="./myo_sim/meshes/thoracic9_s.stl"/>
+    <mesh name="torso_geom_5_thoracic8_s" file="./myo_sim/meshes/thoracic8_s.stl"/>
+    <mesh name="torso_geom_6_thoracic7_s" file="./myo_sim/meshes/thoracic7_s.stl"/>
+    <mesh name="torso_geom_7_thoracic6_s" file="./myo_sim/meshes/thoracic6_s.stl"/>
+    <mesh name="torso_geom_8_thoracic5_s" file="./myo_sim/meshes/thoracic5_s.stl"/>
+    <mesh name="torso_geom_9_thoracic4_s" file="./myo_sim/meshes/thoracic4_s.stl"/>
+    <mesh name="torso_geom_10_thoracic3_s" file="./myo_sim/meshes/thoracic3_s.stl"/>
+    <mesh name="torso_geom_11_thoracic2_s" file="./myo_sim/meshes/thoracic2_s.stl"/>
+    <mesh name="torso_geom_12_thoracic1_s" file="./myo_sim/meshes/thoracic1_s.stl"/>
+    <mesh name="torso_geom_13_ribcage_s" file="./myo_sim/meshes/thorax.stl"/>
+    <mesh name="hat_cervical" file="./myo_sim/meshes/hat_cervical.stl"/>
+    <mesh name="hat_jaw" file="./myo_sim/meshes/hat_jaw.stl"/>
+    <mesh name="hat_skull" file="./myo_sim/meshes/hat_skull.stl"/>
+    <mesh name="r_pelvis" file="./myo_sim/meshes/r_pelvis.stl"/>
+    <mesh name="l_pelvis" file="./myo_sim/meshes/l_pelvis.stl"/>
+    <mesh name="r_femur" file="./myo_sim/meshes/r_femur.stl"/>
+    <mesh name="r_tibia" file="./myo_sim/meshes/r_tibia.stl"/>
+    <mesh name="r_fibula" file="./myo_sim/meshes/r_fibula.stl"/>
+    <mesh name="r_talus" file="./myo_sim/meshes/r_talus.stl"/>
+    <mesh name="r_foot" file="./myo_sim/meshes/r_foot.stl"/>
+    <mesh name="r_bofoot" file="./myo_sim/meshes/r_bofoot.stl"/>
+    <mesh name="r_patella" file="./myo_sim/meshes/r_patella.stl"/>
+    <mesh name="l_femur" file="./myo_sim/meshes/l_femur.stl"/>
+    <mesh name="l_tibia" file="./myo_sim/meshes/l_tibia.stl"/>
+    <mesh name="l_fibula" file="./myo_sim/meshes/l_fibula.stl"/>
+    <mesh name="l_talus" file="./myo_sim/meshes/l_talus.stl"/>
+    <mesh name="l_foot" file="./myo_sim/meshes/l_foot.stl"/>
+    <mesh name="l_bofoot" file="./myo_sim/meshes/l_bofoot.stl"/>
+    <mesh name="l_patella" file="./myo_sim/meshes/l_patella.stl"/>
+    <mesh name="ground_geom_1_thorax" file="./myo_sim/meshes/thorax.stl"/>
+    <mesh name="clavicle_geom_1_clavicle" file="./myo_sim/meshes/clavicle.stl"/>
+    <mesh name="scapula_geom_1_scapula" file="./myo_sim/meshes/scapula.stl"/>
+    <mesh name="humerus_geom_1_humerus" file="./myo_sim/meshes/humerus.stl"/>
+    <mesh name="ulna_geom_1_ulna" file="./myo_sim/meshes/ulna.stl"/>
+    <mesh name="radius_geom_1_radius" file="./myo_sim/meshes/radius.stl"/>
+    <mesh name="proximal_row_geom_1_lunate" file="./myo_sim/meshes/lunate.stl"/>
+    <mesh name="proximal_row_geom_2_sdfastSCAPHOIDw" file="./myo_sim/meshes/scaphoid.stl"/>
+    <mesh name="proximal_row_geom_3_sdfastPISIFORMw" file="./myo_sim/meshes/pisiform.stl"/>
+    <mesh name="proximal_row_geom_4_sdfastTRIQUETRALw" file="./myo_sim/meshes/triquetrum.stl"/>
+    <mesh name="thorax" file="./myo_sim/meshes/thorax.stl"/>
+    <mesh name="clavicle" file="./myo_sim/meshes/clavicle.stl"/>
+    <mesh name="scapula" file="./myo_sim/meshes/scapula.stl"/>
+    <mesh name="humerus" file="./myo_sim/meshes/humerus.stl"/>
+    <mesh name="ulna" file="./myo_sim/meshes/ulna.stl"/>
+    <mesh name="radius" file="./myo_sim/meshes/radius.stl"/>
+    <mesh name="lunate" file="./myo_sim/meshes/lunate.stl"/>
+    <mesh name="scaphoid" file="./myo_sim/meshes/scaphoid.stl"/>
+    <mesh name="pisiform" file="./myo_sim/meshes/pisiform.stl"/>
+    <mesh name="triquetrum" file="./myo_sim/meshes/triquetrum.stl"/>
+    <mesh name="capitate" file="./myo_sim/meshes/capitate.stl"/>
+    <mesh name="trapezium" file="./myo_sim/meshes/trapezium.stl"/>
+    <mesh name="1mc" file="./myo_sim/meshes/1mc.stl"/>
+    <mesh name="thumbprox" file="./myo_sim/meshes/thumbprox.stl"/>
+    <mesh name="thumbdist" file="./myo_sim/meshes/thumbdist.stl"/>
+    <mesh name="trapezoid" file="./myo_sim/meshes/trapezoid.stl"/>
+    <mesh name="hamate" file="./myo_sim/meshes/hamate.stl"/>
+    <mesh name="2mc" file="./myo_sim/meshes/2mc.stl"/>
+    <mesh name="2proxph" file="./myo_sim/meshes/2proxph.stl"/>
+    <mesh name="2midph" file="./myo_sim/meshes/2midph.stl"/>
+    <mesh name="2distph" file="./myo_sim/meshes/2distph.stl"/>
+    <mesh name="3mc" file="./myo_sim/meshes/3mc.stl"/>
+    <mesh name="3proxph" file="./myo_sim/meshes/3proxph.stl"/>
+    <mesh name="3midph" file="./myo_sim/meshes/3midph.stl"/>
+    <mesh name="3distph" file="./myo_sim/meshes/3distph.stl"/>
+    <mesh name="4mc" file="./myo_sim/meshes/4mc.stl"/>
+    <mesh name="4proxph" file="./myo_sim/meshes/4proxph.stl"/>
+    <mesh name="4midph" file="./myo_sim/meshes/4midph.stl"/>
+    <mesh name="4distph" file="./myo_sim/meshes/4distph.stl"/>
+    <mesh name="5mc" file="./myo_sim/meshes/5mc.stl"/>
+    <mesh name="5proxph" file="./myo_sim/meshes/5proxph.stl"/>
+    <mesh name="5midph" file="./myo_sim/meshes/5midph.stl"/>
+    <mesh name="5distph" file="./myo_sim/meshes/5distph.stl"/>
+    <mesh name="meshscene" file="./myo_sim/scene/myosuite_scene_noFloor.msh" scale="0.01 0.01 0.01"/>
+    <mesh name="logo" file="./myo_sim/scene/myosuite_logo.msh" scale="2 2 2"/>
     <mesh name="pyramid" vertex="0 6 0 0 -6 0 0.5 6 0 0.5 -6 0 0.5 6 0.5 0.5 -6 0.5"/>
     <mesh name="corner" vertex="0 0 0 0 -0.5 0 0.5 -0.5 0 0.5 0 0 0.5 0 0.5 0.5 -0.5 0.5 0 -0.5 0.5"/>
-    <mesh name="tabletennis_table" file="../assets/tabletennis_table.obj"/>
-    <mesh name="tabletennis_net_mesh" file="../assets/tabletennis_net.obj"/>
-    <mesh name="paddle_mesh" file="../assets/paddle.obj"/>
-    <mesh name="clavicle_geom_1_clavicle_mirrored" file="../myo_sim/meshes/clavicle.stl" scale="1 -1 1"/>
-    <mesh name="scapula_geom_1_scapula_mirrored" file="../myo_sim/meshes/scapula.stl" scale="1 -1 1"/>
-    <mesh name="humerus_geom_1_humerus_mirrored" file="../myo_sim/meshes/humerus.stl" scale="1 -1 1"/>
-    <mesh name="ulna_geom_1_ulna_mirrored" file="../myo_sim/meshes/ulna.stl" scale="1 -1 1"/>
-    <mesh name="radius_mirrored" file="../myo_sim/meshes/radius.stl" scale="1 -1 1"/>
-    <mesh name="lunate_mirrored" file="../myo_sim/meshes/lunate.stl" scale="1 -1 1"/>
-    <mesh name="scaphoid_mirrored" file="../myo_sim/meshes/scaphoid.stl" scale="1 -1 1"/>
-    <mesh name="pisiform_mirrored" file="../myo_sim/meshes/pisiform.stl" scale="1 -1 1"/>
-    <mesh name="triquetrum_mirrored" file="../myo_sim/meshes/triquetrum.stl" scale="1 -1 1"/>
-    <mesh name="capitate_mirrored" file="../myo_sim/meshes/capitate.stl" scale="1 -1 1"/>
-    <mesh name="trapezium_mirrored" file="../myo_sim/meshes/trapezium.stl" scale="1 -1 1"/>
-    <mesh name="1mc_mirrored" file="../myo_sim/meshes/1mc.stl" scale="1 -1 1"/>
-    <mesh name="thumbprox_mirrored" file="../myo_sim/meshes/thumbprox.stl" scale="1 -1 1"/>
-    <mesh name="thumbdist_mirrored" file="../myo_sim/meshes/thumbdist.stl" scale="1 -1 1"/>
-    <mesh name="trapezoid_mirrored" file="../myo_sim/meshes/trapezoid.stl" scale="1 -1 1"/>
-    <mesh name="hamate_mirrored" file="../myo_sim/meshes/hamate.stl" scale="1 -1 1"/>
-    <mesh name="2mc_mirrored" file="../myo_sim/meshes/2mc.stl" scale="1 -1 1"/>
-    <mesh name="2proxph_mirrored" file="../myo_sim/meshes/2proxph.stl" scale="1 -1 1"/>
-    <mesh name="2midph_mirrored" file="../myo_sim/meshes/2midph.stl" scale="1 -1 1"/>
-    <mesh name="2distph_mirrored" file="../myo_sim/meshes/2distph.stl" scale="1 -1 1"/>
-    <mesh name="3mc_mirrored" file="../myo_sim/meshes/3mc.stl" scale="1 -1 1"/>
-    <mesh name="3proxph_mirrored" file="../myo_sim/meshes/3proxph.stl" scale="1 -1 1"/>
-    <mesh name="3midph_mirrored" file="../myo_sim/meshes/3midph.stl" scale="1 -1 1"/>
-    <mesh name="3distph_mirrored" file="../myo_sim/meshes/3distph.stl" scale="1 -1 1"/>
-    <mesh name="4mc_mirrored" file="../myo_sim/meshes/4mc.stl" scale="1 -1 1"/>
-    <mesh name="4proxph_mirrored" file="../myo_sim/meshes/4proxph.stl" scale="1 -1 1"/>
-    <mesh name="4midph_mirrored" file="../myo_sim/meshes/4midph.stl" scale="1 -1 1"/>
-    <mesh name="4distph_mirrored" file="../myo_sim/meshes/4distph.stl" scale="1 -1 1"/>
-    <mesh name="5mc_mirrored" file="../myo_sim/meshes/5mc.stl" scale="1 -1 1"/>
-    <mesh name="5proxph_mirrored" file="../myo_sim/meshes/5proxph.stl" scale="1 -1 1"/>
-    <mesh name="5midph_mirrored" file="../myo_sim/meshes/5midph.stl" scale="1 -1 1"/>
-    <mesh name="5distph_mirrored" file="../myo_sim/meshes/5distph.stl" scale="1 -1 1"/>
+    <mesh name="tabletennis_table" file="./assets/tabletennis_table.obj"/>
+    <mesh name="tabletennis_net_mesh" file="./assets/tabletennis_net.obj"/>
+    <mesh name="paddle_mesh" file="./assets/paddle.obj"/>
+    <mesh name="clavicle_geom_1_clavicle_mirrored" file="./myo_sim/meshes/clavicle.stl" scale="1 -1 1"/>
+    <mesh name="scapula_geom_1_scapula_mirrored" file="./myo_sim/meshes/scapula.stl" scale="1 -1 1"/>
+    <mesh name="humerus_geom_1_humerus_mirrored" file="./myo_sim/meshes/humerus.stl" scale="1 -1 1"/>
+    <mesh name="ulna_geom_1_ulna_mirrored" file="./myo_sim/meshes/ulna.stl" scale="1 -1 1"/>
+    <mesh name="radius_mirrored" file="./myo_sim/meshes/radius.stl" scale="1 -1 1"/>
+    <mesh name="lunate_mirrored" file="./myo_sim/meshes/lunate.stl" scale="1 -1 1"/>
+    <mesh name="scaphoid_mirrored" file="./myo_sim/meshes/scaphoid.stl" scale="1 -1 1"/>
+    <mesh name="pisiform_mirrored" file="./myo_sim/meshes/pisiform.stl" scale="1 -1 1"/>
+    <mesh name="triquetrum_mirrored" file="./myo_sim/meshes/triquetrum.stl" scale="1 -1 1"/>
+    <mesh name="capitate_mirrored" file="./myo_sim/meshes/capitate.stl" scale="1 -1 1"/>
+    <mesh name="trapezium_mirrored" file="./myo_sim/meshes/trapezium.stl" scale="1 -1 1"/>
+    <mesh name="1mc_mirrored" file="./myo_sim/meshes/1mc.stl" scale="1 -1 1"/>
+    <mesh name="thumbprox_mirrored" file="./myo_sim/meshes/thumbprox.stl" scale="1 -1 1"/>
+    <mesh name="thumbdist_mirrored" file="./myo_sim/meshes/thumbdist.stl" scale="1 -1 1"/>
+    <mesh name="trapezoid_mirrored" file="./myo_sim/meshes/trapezoid.stl" scale="1 -1 1"/>
+    <mesh name="hamate_mirrored" file="./myo_sim/meshes/hamate.stl" scale="1 -1 1"/>
+    <mesh name="2mc_mirrored" file="./myo_sim/meshes/2mc.stl" scale="1 -1 1"/>
+    <mesh name="2proxph_mirrored" file="./myo_sim/meshes/2proxph.stl" scale="1 -1 1"/>
+    <mesh name="2midph_mirrored" file="./myo_sim/meshes/2midph.stl" scale="1 -1 1"/>
+    <mesh name="2distph_mirrored" file="./myo_sim/meshes/2distph.stl" scale="1 -1 1"/>
+    <mesh name="3mc_mirrored" file="./myo_sim/meshes/3mc.stl" scale="1 -1 1"/>
+    <mesh name="3proxph_mirrored" file="./myo_sim/meshes/3proxph.stl" scale="1 -1 1"/>
+    <mesh name="3midph_mirrored" file="./myo_sim/meshes/3midph.stl" scale="1 -1 1"/>
+    <mesh name="3distph_mirrored" file="./myo_sim/meshes/3distph.stl" scale="1 -1 1"/>
+    <mesh name="4mc_mirrored" file="./myo_sim/meshes/4mc.stl" scale="1 -1 1"/>
+    <mesh name="4proxph_mirrored" file="./myo_sim/meshes/4proxph.stl" scale="1 -1 1"/>
+    <mesh name="4midph_mirrored" file="./myo_sim/meshes/4midph.stl" scale="1 -1 1"/>
+    <mesh name="4distph_mirrored" file="./myo_sim/meshes/4distph.stl" scale="1 -1 1"/>
+    <mesh name="5mc_mirrored" file="./myo_sim/meshes/5mc.stl" scale="1 -1 1"/>
+    <mesh name="5proxph_mirrored" file="./myo_sim/meshes/5proxph.stl" scale="1 -1 1"/>
+    <mesh name="5midph_mirrored" file="./myo_sim/meshes/5midph.stl" scale="1 -1 1"/>
+    <mesh name="5distph_mirrored" file="./myo_sim/meshes/5distph.stl" scale="1 -1 1"/>
   </asset>
 
   <worldbody>

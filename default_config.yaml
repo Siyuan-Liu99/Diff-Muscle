@@ -39,7 +39,7 @@ max_iterations: 3000  # number of policy updates
 empirical_normalization: true
 # -- logging parameters
 eval_interval: 500  # check for potential saves every `eval_interval` iterations
-eval_episodes: 1  # number of episodes to evaluate
+eval_episodes: 20  # number of episodes to evaluate
 save_interval: 300  # check for potential saves every `save_interval` iterations
 experiment_name: competitive_tennis
 run_name: ""

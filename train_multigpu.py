@@ -179,7 +179,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--config",
         type=str,
-        default="default_config_single.yaml",
+        default="default_config.yaml",
         help="Path to config file",
     )
     parser.add_argument(

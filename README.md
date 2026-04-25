@@ -19,19 +19,22 @@ Key features:
 
 ## Installation
 
-This project uses [uv](https://github.com/astral-sh/uv) for dependency management and requires an **NVIDIA GPU**.
+This project uses [uv](https://github.com/astral-sh/uv) for dependency management and requires an **NVIDIA GPU** with CUDA 12.4+.
 
 ```bash
-# Install uv
+# 1. Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Clone the repository
+# 2. Clone the repository
 git clone <your-repo-url>
 cd Diff-Muscle
 
-# Install dependencies
+# 3. Install all dependencies (includes mjlab and mujoco-warp)
 uv sync
+source ./.venv/bin/activate
 ```
+
+This project bundles [mjlab](https://github.com/mujocolab/mjlab) in src/mjlab/. Running uv sync installs mjlab from this local source along with all its dependencies, including [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp) (pinned to a tested revision). No separate mjlab installation is required.
 
 ---
 
@@ -40,23 +43,46 @@ uv sync
 ### Single GPU
 
 ```bash
-uv run python train_single_multigpu.py
+python train_multigpu.py
 ```
 
 ### Multi-GPU
 
 ```bash
-uv run torchrun --nproc_per_node=<NUM_GPUS> train_single_multigpu.py
+CUDA_VISIBLE_DEVICES="0,1,2,3" python train_multigpu.py --gpu-ids all
 ```
 
-Training configuration is in `default_config_single.yaml`. Key parameters:
+Training configuration is in `default_config.yaml`. Key parameters:
+
+**Environment**
 
 | Parameter | Default | Description |
 |---|---|---|
 | `num_envs` | 1024 | Number of parallel environments |
-| `action_type` | `joint_pd` | Action space: `joint_pd`, `muscle_pd`, `muscle_act`, `muscle_vae` |
+| `action_type` | `joint_pd` | Action space: `joint_pd`, `muscle_act` |
 | `max_episode_length` | 300 | Max steps per episode |
 | `frame_skip` | 5 | Physics steps per control step |
+
+**Runner**
+
+| Parameter | Default | Description |
+|---|---|---|
+| `num_steps_per_env` | 20 | Rollout length per environment per update |
+| `max_iterations` | 3000 | Total number of policy update steps |
+| `empirical_normalization` | `true` | Normalize observations using running statistics |
+| `eval_interval` | 500 | Run evaluation every N iterations |
+| `save_interval` | 300 | Save checkpoint every N iterations |
+| `eval_episodes` | 20 | number of episodes to evaluate |
+
+
+**PPO Algorithm**
+
+| Parameter | Default | Description |
+|---|---|---|
+| `learning_rate` | 0.0005 | Initial learning rate (decays linearly by default) |
+| `schedule` | `linear_decay` | LR schedule: `linear_decay` or `adaptive` |
+| `num_learning_epochs` | 5 | Gradient update epochs per rollout |
+| `num_mini_batches` | 4 | Mini-batches per epoch (`batch = num_envs × num_steps / num_mini_batches`) |
 
 ---
 
@@ -68,8 +94,8 @@ Diff-Muscle/
 ├── planner.py                # Physics-based ball trajectory planner
 ├── muscle_utils.py           # Muscle activation utilities (PD + FLV inverse dynamics)
 ├── on_policy_runner.py       # PPO on-policy training runner
-├── train_single_multigpu.py  # Training entry point
-├── default_config_single.yaml# PPO hyperparameters and logging config
+├── train_multigpu.py  # Training entry point
+├── default_config.yaml# PPO hyperparameters and logging config
 ├── tabletennis.xml           # MuJoCo scene definition
 ├── assets/                   # 3D mesh assets (paddle, ball, table)
 ├── myo_sim/                  # MyoSim musculoskeletal models (Apache-2.0)
