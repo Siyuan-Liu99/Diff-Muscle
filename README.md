@@ -1,19 +1,15 @@
-# Table Tennis with Musculoskeletal Control
+# Diff-Muscle
 
-A MuJoCo-based reinforcement learning environment for training a musculoskeletal arm model to play table tennis, built on top of [mjlab](https://github.com/mujocolab/mjlab) and the [MyoSim](https://github.com/MyoHub/myo_sim) musculoskeletal model library.
+**Diff-Muscle: Efficient Learning for Musculoskeletal Robotic Table Tennis. [[Paper](https://arxiv.org/abs/2603.08617)]**
+
+![Diff-Muscle](images/diff-muscle.png)
 
 ---
 
 ## Overview
 
-This project simulates a table tennis task where a **MyoSim musculoskeletal arm** (27 DoF, 63 muscles) must hit incoming balls over the net and land them on the opponent's side of the table.
+This repository is the official implementation of our paper [Diff-muscle](https://arxiv.org/abs/2603.08617). We use [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp) for GPU-accelerated training, supporting thousands of parallel environments.
 
-Key features:
-- **Musculoskeletal control**: Supports multiple action types — `joint_pd`, `muscle_pd`, `muscle_act`, and `muscle_vae`
-- **Hierarchical planning**: A physics-based trajectory planner (`planner.py`) computes high-level target paddle poses and velocities from ball kinematics
-- **Parallel simulation**: GPU-accelerated via [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp), supports thousands of parallel environments
-- **Multi-GPU training**: Uses `torchrunx` for distributed PPO training across multiple GPUs
-- **Domain randomization**: Ball position, velocity, paddle mass, and ball friction are randomized at reset
 
 ---
 
@@ -56,33 +52,38 @@ Training configuration is in `default_config.yaml`. Key parameters:
 
 **Environment**
 
-| Parameter | Default | Description |
-|---|---|---|
-| `num_envs` | 1024 | Number of parallel environments |
-| `action_type` | `joint_pd` | Action space: `joint_pd`, `muscle_act` |
-| `max_episode_length` | 300 | Max steps per episode |
-| `frame_skip` | 5 | Physics steps per control step |
+
+| Parameter            | Default    | Description                            |
+| -------------------- | ---------- | -------------------------------------- |
+| `num_envs`           | 1024       | Number of parallel environments        |
+| `action_type`        | `joint_pd` | Action space: `joint_pd`, `muscle_act` |
+| `max_episode_length` | 300        | Max steps per episode                  |
+| `frame_skip`         | 5          | Physics steps per control step         |
+
 
 **Runner**
 
-| Parameter | Default | Description |
-|---|---|---|
-| `num_steps_per_env` | 20 | Rollout length per environment per update |
-| `max_iterations` | 3000 | Total number of policy update steps |
-| `empirical_normalization` | `true` | Normalize observations using running statistics |
-| `eval_interval` | 500 | Run evaluation every N iterations |
-| `save_interval` | 300 | Save checkpoint every N iterations |
-| `eval_episodes` | 20 | number of episodes to evaluate |
+
+| Parameter                 | Default | Description                                     |
+| ------------------------- | ------- | ----------------------------------------------- |
+| `num_steps_per_env`       | 20      | Rollout length per environment per update       |
+| `max_iterations`          | 3000    | Total number of policy update steps             |
+| `empirical_normalization` | `true`  | Normalize observations using running statistics |
+| `eval_interval`           | 500     | Run evaluation every N iterations               |
+| `save_interval`           | 300     | Save checkpoint every N iterations              |
+| `eval_episodes`           | 20      | number of episodes to evaluate                  |
 
 
 **PPO Algorithm**
 
-| Parameter | Default | Description |
-|---|---|---|
-| `learning_rate` | 0.0005 | Initial learning rate (decays linearly by default) |
-| `schedule` | `linear_decay` | LR schedule: `linear_decay` or `adaptive` |
-| `num_learning_epochs` | 5 | Gradient update epochs per rollout |
-| `num_mini_batches` | 4 | Mini-batches per epoch (`batch = num_envs × num_steps / num_mini_batches`) |
+
+| Parameter             | Default        | Description                                                                |
+| --------------------- | -------------- | -------------------------------------------------------------------------- |
+| `learning_rate`       | 0.0005         | Initial learning rate (decays linearly by default)                         |
+| `schedule`            | `linear_decay` | LR schedule: `linear_decay` or `adaptive`                                  |
+| `num_learning_epochs` | 5              | Gradient update epochs per rollout                                         |
+| `num_mini_batches`    | 4              | Mini-batches per epoch (`batch = num_envs × num_steps / num_mini_batches`) |
+
 
 ---
 
@@ -103,46 +104,23 @@ Diff-Muscle/
 └── tests/                    # Unit tests
 ```
 
----
-
-## Environment Details
-
-### Observation Space
-
-The actor observation includes: pelvis position, body joint positions/velocities, ball position/velocity, paddle position/velocity/orientation, reach error, contact information, current activations, and planner targets.
-
-### Action Space
-
-Depends on `action_type`:
-- **`joint_pd`**: Target joint positions → muscle activations via FK + PD control
-- **`muscle_act`**: Direct muscle activations
-- **`muscle_vae`**: Target muscle lengths → activations via FLV inverse dynamics
-
-### Reward
-
-| Component | Weight | Description |
-|---|---|---|
-| `paddle_pos_err` | 20 | Paddle reaches target hit position |
-| `paddle_ori_err` | 10 | Paddle orientation aligned with desired hit direction |
-| `hit_with_paddle` | 100 | Ball contacts paddle |
-| `fall_opponent` | 100 | Ball lands on opponent's side |
-| `fall_hit_plane` | 100 | Returned ball can reach opponent's body plane |
-| `net_penalty` | -20 | Ball hits the net |
-
-### Termination
-
-Episode ends on: timeout (5s), ball out of range, or ball leaves the paddle without a valid hit.
-
----
-
 ## Third-Party Code
 
-- **`src/mjlab/`** — [mjlab](https://github.com/mujocolab/mjlab) framework (Apache-2.0)
-- **`src/mjlab/utils/lab_api/`** — Utilities forked from [NVIDIA Isaac Lab](https://github.com/isaac-sim/IsaacLab) (BSD-3-Clause)
-- **`myo_sim/`** — [MyoSim](https://github.com/MyoHub/myo_sim) musculoskeletal models (Apache-2.0)
+- `**src/mjlab/**` — [mjlab](https://github.com/mujocolab/mjlab) framework (Apache-2.0)
+- `**src/mjlab/utils/lab_api/**` — Utilities forked from [NVIDIA Isaac Lab](https://github.com/isaac-sim/IsaacLab) (BSD-3-Clause)
 
 ---
 
-## License
+## Citation
 
-This project is licensed under the [Apache License, Version 2.0](LICENSE).
+If you find this open source release useful, please reference in your paper:
+
+```
+@article{zhao2026diff,
+  title={Diff-Muscle: Efficient Learning for Musculoskeletal Robotic Table Tennis},
+  author={Zhao, Wentao and Guo, Jun and Huang, Kangyao and Liu, Xin and Liu, Huaping},
+  journal={arXiv preprint arXiv:2603.08617},
+  year={2026}
+}
+```
+
