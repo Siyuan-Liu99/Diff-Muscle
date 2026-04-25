@@ -1,0 +1,53 @@
+algorithm:
+  class_name: PPO
+  # training parameters
+  # -- advantage normalization
+  normalize_advantage_per_mini_batch: true
+  # -- value function
+  value_loss_coef: 1.0
+  clip_param: 0.2
+  use_clipped_value_loss: true
+  # -- surrogate loss
+  desired_kl: 0.01
+  entropy_coef: 0.01
+  gamma: 0.99
+  lam: 0.95
+  max_grad_norm: 1.0
+  # -- training
+  learning_rate: 0.0005
+  num_learning_epochs: 5
+  num_mini_batches: 4  # mini batch size = num_envs * num_steps / num_mini_batches
+  schedule: linear_decay  # adaptive, fixed
+
+policy:
+  class_name: ActorCritic
+  # for MLP i.e. `ActorCritic`
+  activation: elu
+  actor_hidden_dims: [1024, 1024, 512, 512, 256, 256]
+  critic_hidden_dims: [1024, 1024, 512, 512, 256, 256]
+  init_noise_std: 1.0
+  noise_std_type: "scalar"  # 'scalar' or 'log'
+
+  # only needed for `ActorCriticRecurrent`
+  # rnn_type: 'gru'
+  # rnn_hidden_dim: 1024
+  # rnn_num_layers: 1
+
+
+num_steps_per_env: 20  # number of steps per environment per iteration
+max_iterations: 3000  # number of policy updates
+empirical_normalization: true
+# -- logging parameters
+eval_interval: 500  # check for potential saves every `eval_interval` iterations
+eval_episodes: 1  # number of episodes to evaluate
+save_interval: 300  # check for potential saves every `save_interval` iterations
+experiment_name: competitive_tennis
+run_name: ""
+# -- logging writer
+logger: tensorboard  # tensorboard, neptune, wandb
+neptune_project: competitive_tennis
+wandb_project: competitive_tennis
+# -- load and resuming
+resume_path: ""
+
+seed: 42

@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# uv
+# uv.lock is intentionally kept in the repo for reproducibility
+
+# Training logs and checkpoints
+logs/
+runs/
+wandb/
+outputs/
+checkpoints/
+*.pt
+*.pth
+*.onnx
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# MuJoCo cache
+~/.mujoco/
+
+# Warp cache
+warp_cache/
+_warp_cache/
+
+# Environment variables / secrets
+.env
+.env.local
+
+# Generated stubs
+typings/mujoco/

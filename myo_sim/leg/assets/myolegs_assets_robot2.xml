@@ -1,0 +1,58 @@
+<mujocoinclude model="MyoLegs_v0.0.1">
+<!-- =================================================
+    Copyright 2025 Vikash Kumar, Vittorio Caggiano, Huawei Wang
+    Model	:: Myo Legs (MuJoCoV2.0)
+    Author	:: Vikash Kumar (vikashplus@gmail.com), Vittorio Caggiano, Huawei Wang
+    Source	:: https://github.com/MyoHub/myosuite
+    License	:: Under Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+====================================================== -->
+
+    <contact>
+        <pair geom1="r_femur1_col_robot2" geom2="l_femur1_col_robot2" condim="1"/>
+        <pair geom1="r_femur2_col_robot2" geom2="l_femur2_col_robot2" condim="1"/>
+        <pair geom1="r_tibia1_col_robot2" geom2="l_tibia1_col_robot2" condim="1"/>
+        <pair geom1="r_tibia2_col_robot2" geom2="l_tibia2_col_robot2" condim="1"/>
+        <pair geom1="r_foot_col1_robot2" geom2="l_foot_col1_robot2" condim="1"/>
+        <pair geom1="r_foot_col4_robot2" geom2="l_foot_col4_robot2" condim="1"/>
+
+        <pair geom1="r_femur1_col_robot2" geom2="l_tibia1_col_robot2" condim="1"/>
+        <pair geom1="l_femur1_col_robot2" geom2="r_tibia1_col_robot2" condim="1"/>
+
+        <pair geom1="r_femur2_col_robot2" geom2="l_tibia1_col_robot2" condim="1"/>
+        <pair geom1="l_femur2_col_robot2" geom2="r_tibia1_col_robot2" condim="1"/>
+
+        <pair geom1="r_femur1_col_robot2" geom2="l_tibia2_col_robot2" condim="1"/>
+        <pair geom1="l_femur1_col_robot2" geom2="r_tibia2_col_robot2" condim="1"/>
+
+        <pair geom1="r_femur2_col_robot2" geom2="l_tibia2_col_robot2" condim="1"/>
+        <pair geom1="l_femur2_col_robot2" geom2="r_tibia2_col_robot2" condim="1"/>
+    </contact>
+
+
+    <equality>
+        <joint joint1="knee_angle_r_translation2_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_translation2_constraint_robot2" polycoef="7.69254e-11 0.00587971 -0.00125622 -2.61846e-06 6.24355e-07" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_r_translation1_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_translation1_constraint_robot2" polycoef="9.53733e-08 0.00312879 -0.00230804 0.000561561 5.68366e-07" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_r_rotation2_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_rotation2_constraint_robot2" polycoef="-1.47325e-08 0.0791 -0.0328478 -0.0252183 0.0108321" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_r_rotation3_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_rotation3_constraint_robot2" polycoef="1.08939e-08 0.369499 -0.169478 0.0251643 3.50498e-07" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_r_beta_translation2_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_beta_translation2_constraint_robot2" polycoef="-0.0108281 -0.0487847 0.00927644 0.0131673 -0.00349673" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_r_beta_translation1_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_beta_translation1_constraint_robot2" polycoef="0.0524192 -0.0150188 -0.0340522 0.0133393 -0.000879151" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_r_beta_rotation1_robot2" joint2="knee_angle_r_robot2" name="knee_angle_r_beta_rotation1_constraint_robot2" polycoef="0.010506 0.0247615 -1.31647 0.716337 -0.138302" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <!-- <joint joint1="subtalar_angle_r_robot2" name="subtalar_angle_r_constraint_robot2" polycoef="0 0 0 0 0"/> -->
+        <!-- <joint joint1="mtp_angle_r_robot2" name="mtp_angle_r_constraint_robot2" polycoef="0 0 0 0 0"/> -->
+        <joint joint1="knee_angle_l_translation2_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_translation2_constraint_robot2" polycoef="-7.69254e-11 -0.00587971 0.00125622 2.61846e-06 -6.24355e-07" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_l_translation1_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_translation1_constraint_robot2" polycoef="9.53733e-08 0.00312879 -0.00230804 0.000561561 5.68366e-07" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_l_rotation2_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_rotation2_constraint_robot2" polycoef="-1.47325e-08 0.0791 -0.0328478 -0.0252183 0.0108321" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_l_rotation3_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_rotation3_constraint_robot2" polycoef="-1.08939e-08 -0.369499 0.169478 -0.0251643 -3.50498e-07" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_l_beta_translation2_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_beta_translation2_constraint_robot2" polycoef="-0.0108281 -0.0487847 0.00927644 0.0131673 -0.00349673" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_l_beta_translation1_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_beta_translation1_constraint_robot2" polycoef="0.0524192 -0.0150188 -0.0340522 0.0133393 -0.000879151" solimp="0.9999 0.9999 0.001 0.5 2"/>
+        <joint joint1="knee_angle_l_beta_rotation1_robot2" joint2="knee_angle_l_robot2" name="knee_angle_l_beta_rotation1_constraint_robot2" polycoef="0.010506 0.0247615 -1.31647 0.716337 -0.138302" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    </equality>
+
+    <sensor>
+        <touch name="r_foot_robot2" site="r_foot_touch_robot2"/>
+        <touch name="r_toes_robot2" site="r_toes_touch_robot2"/>
+        <touch name="l_foot_robot2" site="l_foot_touch_robot2"/>
+        <touch name="l_toes_robot2" site="l_toes_touch_robot2"/>
+    </sensor>
+
+</mujocoinclude>

@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: >-
+  Table Tennis with Musculoskeletal Control: RL for a MyoSim arm in MuJoCo Warp
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+keywords:
+  - mujoco
+  - mujoco-warp
+  - musculoskeletal
+  - table-tennis
+  - reinforcement-learning
+  - myosuite
+license: Apache-2.0

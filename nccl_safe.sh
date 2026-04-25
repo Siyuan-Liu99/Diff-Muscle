@@ -1,0 +1,6 @@
+# export NCCL_DEBUG=WARN
+export NCCL_SHM_DISABLE=1
+# export NCCL_P2P_DISABLE=1
+# export NCCL_ASYNC_ERROR_HANDLING=1
+
+
