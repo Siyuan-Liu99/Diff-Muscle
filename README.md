@@ -27,7 +27,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone the repository
 git clone <your-repo-url>
-cd tabletennis_double_opensource
+cd Diff-Muscle
 
 # Install dependencies
 uv sync
@@ -63,7 +63,7 @@ Training configuration is in `default_config_single.yaml`. Key parameters:
 ## Project Structure
 
 ```
-tabletennis_double_opensource/
+Diff-Muscle/
 ├── tabletennis_env.py        # Main RL environment (TableTennisWarpEnv)
 ├── planner.py                # Physics-based ball trajectory planner
 ├── muscle_utils.py           # Muscle activation utilities (PD + FLV inverse dynamics)
