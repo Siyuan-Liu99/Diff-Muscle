@@ -593,8 +593,8 @@ class OnPolicyRunner:
                     target_vel_dir = self.eval_env.target_vel / (torch.norm(self.eval_env.target_vel, dim=-1, keepdim=True) + 1e-6)
                     if target_vel_dir[0, 0] > 0:
                         target_vel_dir = -target_vel_dir
-                    # 拍子厚度0.02，球的半径0.02，所以需要往速度的负方向移动0.04
-                    real_target_pos = self.eval_env.target_pos - target_vel_dir * 0.04 
+                    # Paddle thickness 0.02 + ball radius 0.02 = offset 0.04 along negative velocity direction
+                    real_target_pos = self.eval_env.target_pos - target_vel_dir * 0.04
 
                     self.eval_env.sim.data.qpos[:,-14:-11] = real_target_pos
                     # print(self.eval_env.target_pos)

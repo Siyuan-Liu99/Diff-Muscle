@@ -55,7 +55,6 @@ def recursive_mirror(meshes_to_mirror, spec_copy, parent):
     parent.quat[[1, 3]] *= -1
     parent.name += "_mirrored"
 
-    # 重命名 joints
     for j in parent.joints:
         if j.name:
             j.name += "_mirrored"
@@ -412,21 +411,15 @@ class TableTennisWarpEnv(VecEnv):
             ]
         )
 
-        # 计算 t-pose 姿态下的肌肉长度（用于 muscle_vae 模式）
         if self.cfg.action_type == "muscle_vae":
             self._compute_tpose_muscle_length()
 
     def _compute_tpose_muscle_length(self):
-        """计算 t-pose（初始关键帧姿态）下的肌肉长度，用于 muscle_vae 动作映射"""
-        # 使用 fk_data 计算 t-pose 姿态下的肌肉长度
-        # 将初始 qpos 设置到 fk_data 中
+        """Compute muscle lengths at the t-pose (initial keyframe) for muscle_vae action mapping."""
         self.fk_data.qpos[:] = self.init_qpos.unsqueeze(0).repeat(self.num_envs, 1)
-        # 执行正运动学计算
         self.sim.fk_forward()
-        # 获取 t-pose 下的肌肉长度 [num_envs, num_actuators]
-        # 取第一个环境的值作为参考（所有环境应该相同）
+        # All envs share the same initial pose; use env 0 as reference
         self.tpose_muscle_length = self.fk_data.actuator_length[0].clone()
-        # 只保留肌肉执行器的长度 [num_muscles]
         self.tpose_muscle_length_muscles = self.tpose_muscle_length[self.muscle_ind].clone()
 
     def _cal_touching_info(self) -> torch.Tensor:
@@ -589,10 +582,6 @@ class TableTennisWarpEnv(VecEnv):
         obs_list = list([obs_dict[k].clone() for k in self.cfg.obs_keys])
         critic_obs_list = list([critic_obs_dict[k].clone() for k in self.cfg.critic_obs_keys])
 
-        # for key in self.cfg.obs_keys:
-        #     print(key, obs_dict[key].shape)
-        # exit()
-
         self.current_obs = torch.cat(obs_list, dim=-1).nan_to_num(0)
         self.extras = {
             "observations": {"critic": torch.cat(critic_obs_list, dim=-1).nan_to_num(0)},
@@ -679,18 +668,10 @@ class TableTennisWarpEnv(VecEnv):
         ball_pos_in_range = (ball_pos >= self.ball_limited_low) & (ball_pos <= self.ball_limited_high)
         ball_pos_out_of_range = (~ball_pos_in_range).any(dim=-1)
 
-        # the ball touched the net、own after leaving the paddle
-        # touching_other_things = self.touching_state == 3
-        # ball_finished = (self.touching_state == 2) & (self.after_leaving_paddle >= self.leaving_paddle_tolerance)
-
-        # touching the opponent side
-        # touching_opponent_side = self.touching_state == 4
+        # the ball touched the net or left the play area after leaving the paddle
 
         # leave the paddle
         leave_paddle = (self.touching_state == 2) & (self.after_leaving_paddle >= self.leaving_paddle_tolerance)
-
-        # the ball touched something after leaving the paddle
-        # ball_touched_after_leaving = self.touching_state == 3
 
         return max_time | ball_miss | ball_pos_out_of_range | leave_paddle
 
@@ -707,18 +688,10 @@ class TableTennisWarpEnv(VecEnv):
         ball_pos_in_range = (ball_pos >= self.ball_limited_low) & (ball_pos <= self.ball_limited_high)
         ball_pos_out_of_range = (~ball_pos_in_range).any(dim=-1)
 
-        # the ball touched the net、own after leaving the paddle
-        # touching_other_things = self.touching_state == 3
-        # ball_finished = (self.touching_state == 2) & (self.after_leaving_paddle >= self.leaving_paddle_tolerance)
-
-        # touching the opponent side
-        # touching_opponent_side = self.touching_state == 4
+        # the ball touched the net or left the play area after leaving the paddle
 
         # leave the paddle
         leave_paddle = (self.touching_state == 2) & (self.after_leaving_paddle >= self.leaving_paddle_tolerance)
-
-        # the ball touched something after leaving the paddle
-        # ball_touched_after_leaving = self.touching_state == 3
 
         return max_time | ball_miss | ball_pos_out_of_range
 
@@ -772,9 +745,9 @@ class TableTennisWarpEnv(VecEnv):
             )
             fail = compute_land_net(ball_pos[touching_mask], ball_vel[touching_mask], net_h=0.95+0.05)
             success = on_opponent_half & ~fail
-            net_penalty[touching_mask] = fail.float()   # 失败的就变为1
+            net_penalty[touching_mask] = fail.float()
 
-            # TODO: 如果成功落到对手桌面，计算在对手平面的落点
+            # TODO: if ball lands successfully, compute projected landing on opponent's hit plane
             bounce_vel = land_vel.clone()
             bounce_vel[:, 2] = -bounce_vel[:, 2]
             hit_plane_pos, _, _ = compute_hit_pos(t_land[success], land_pos[success], bounce_vel[success], hit_plane_x=-1.8)
@@ -784,7 +757,6 @@ class TableTennisWarpEnv(VecEnv):
             success_idx = torch.nonzero(success, as_tuple=True)[0]
             on_hit_plane_idx = torch.nonzero(on_hit_plane, as_tuple=True)[0]
             if len(on_hit_plane_idx) > 0:
-                # breakpoint()
                 fall_hit_plane[touching_idx[success_idx[on_hit_plane_idx]]] = on_hit_plane[on_hit_plane_idx].float()
             
             fall_opponent[touching_mask] = success.float()
@@ -848,7 +820,7 @@ class TableTennisWarpEnv(VecEnv):
         paddle_face_dir = torch.bmm(
             self.data.site_xmat[:, self.paddle_sid].reshape(-1, 3, 3), self.init_paddle_face_dir.unsqueeze(-1)
         ).squeeze(-1)
-        # 不分正反手，哪一面打球都可以
+        # Either face of the paddle is valid; use absolute dot product
         paddle_ori_err = torch.arccos(
             torch.clamp(
                 torch.abs(
@@ -862,16 +834,13 @@ class TableTennisWarpEnv(VecEnv):
         return paddle_ori_err
 
     def _get_paddle_pos_err(self) -> torch.Tensor:
-        # paddle site的位置在拍面的正中心
         target_vel_dir = self.target_vel / (torch.norm(self.target_vel, dim=-1, keepdim=True) + 1e-6)
-        # 拍子厚度0.02，球的半径0.02，所以需要朝自身移动0.04
+        # Paddle thickness 0.02 + ball radius 0.02 = offset 0.04 along velocity direction
         real_target_pos = torch.zeros_like(self.target_pos)
         vel_to_opponent_mask = (target_vel_dir[:, 0] < 0)
         real_target_pos[vel_to_opponent_mask] = self.target_pos[vel_to_opponent_mask] - target_vel_dir[vel_to_opponent_mask] * 0.04
         real_target_pos[~vel_to_opponent_mask] = self.target_pos[~vel_to_opponent_mask] + target_vel_dir[~vel_to_opponent_mask] * 0.04
 
-        # paddle_center_pos = self.data.site_xpos[:, self.paddle_sid]
-        # 奖励paddle body的位置
         paddle_pos = self.data.qpos[:, self.paddle_posadr : self.paddle_posadr + 3]
         paddle_pos_err = torch.norm(paddle_pos - real_target_pos, dim=-1)
 
@@ -917,18 +886,18 @@ class TableTennisWarpEnv(VecEnv):
         init_ball_qpos = torch.zeros(n_reset_envs, 3, device=self.device)
         init_ball_qvel = torch.zeros(n_reset_envs, 3, device=self.device)
 
-        # TODO: 检测球网，并重新采样
+        # TODO: detect net crossing and resample until valid
         cross_net_flag = torch.zeros(n_reset_envs, device=self.device, dtype=torch.bool)
         while not cross_net_flag.all().item():
             n_envs_remain = (~cross_net_flag).sum().item()
             init_ball_qpos_remain, init_ball_qvel_remain = self._rand_ball_pos_and_vel(n_envs_remain)
             cross_net_flag_remain = self._check_ball_cross_net(init_ball_qpos_remain, init_ball_qvel_remain)
 
-            # TODO: 判断发球后的target pos是否在范围内,满足这个范围才发球
+            # TODO: validate that the post-serve target pos lands within the valid zone
             init_ball_qpos_judge = init_ball_qpos_remain.clone()
             init_ball_qvel_judge = init_ball_qvel_remain.clone()
 
-            # TODO: 仅仅需要算hit_pos
+            # TODO: only need to compute hit_pos here
             t_land, land_pos, land_vel = compute_land(init_ball_qpos_judge, init_ball_qvel_judge)
             bounce_vel = land_vel.clone()
             bounce_vel[:, 2] = -bounce_vel[:, 2]
@@ -1014,7 +983,7 @@ class TableTennisWarpEnv(VecEnv):
         return self.get_observations()
 
     def joint_pd_to_muscle_act(self, actions: torch.Tensor) -> torch.Tensor:
-        # TODO： 策略的前两维控制pelvis，后273维控制肌肉
+        # TODO: first 2 dims control pelvis, remaining 273 dims control muscles
         # add perturbation to actions
         if self.cfg.enable_action_randomization:
             actions_perturbation = torch.randn_like(actions) * self.cfg.action_range
@@ -1061,23 +1030,16 @@ class TableTennisWarpEnv(VecEnv):
         if self.cfg.action_type == "joint_pd":
             self.data.ctrl[:] = self.joint_pd_to_muscle_act(actions)
         elif self.cfg.action_type == "muscle_vae":
-            # ========== muscle_vae 模式 ==========
-            # Step 1: 动作解析 - 将策略输出 a ∈ [-1, 1] 映射为目标肌肉长度
-            # 公式: target_length = (a + 1.0) * l_M^{tpose}
-            # 这里 a=0 对应 t-pose 长度，a=-1 对应 0，a=1 对应 2*tpose
-            
-            # 分离肌肉动作和 pelvis 动作
-            muscle_actions = actions[:, self.muscle_ind]  # [batch, 273]
-            pelvis_actions = actions[:, self.non_muscle_ind]  # [batch, 2]
-            
-            # 映射到目标肌肉长度: target_length = (a + 1.0) * tpose_length
+            # Map policy output a ∈ [-1, 1] to target muscle length:
+            # target_length = (a + 1.0) * l_M^{tpose}
+            # (a=0 → t-pose length, a=-1 → 0, a=1 → 2×t-pose)
+            muscle_actions = actions[:, self.muscle_ind]
+            pelvis_actions = actions[:, self.non_muscle_ind]
+
             target_length_muscles = (muscle_actions + 1.0) * self.tpose_muscle_length_muscles.unsqueeze(0)
-            
-            # 构建完整的 target_length tensor [batch, num_actuators]
+
             target_length = torch.zeros(actions.shape[0], self.data.actuator_length.shape[1], device=self.device)
             target_length[:, self.muscle_ind] = target_length_muscles
-            
-            # Step 2: 调用 VAE 控制器计算肌肉激活
             muscle_activations = calculate_vae_muscle_act(
                 model=self.model,
                 data=self.data,
@@ -1086,18 +1048,18 @@ class TableTennisWarpEnv(VecEnv):
                 kd=self.cfg.kd_vae,
             )
             
-            # Step 3: 处理 Pelvis - 线性映射到控制范围
+            # Step 3: map pelvis actions linearly to control range
             pelvis_ctrl = (pelvis_actions + 1) / 2 * (
                 self.non_muscle_high - self.non_muscle_low
             ) + self.non_muscle_low
-            
-            # Step 4: 组装完整的 275 维控制信号并写入
+
+            # Step 4: assemble full 275-dim control signal
             ctrl = torch.zeros_like(self.data.ctrl)
             ctrl[:, self.muscle_ind] = muscle_activations
             ctrl[:, self.non_muscle_ind] = pelvis_ctrl
             self.data.ctrl[:] = ctrl
         else:
-            # muscle_pd 或 muscle_act 模式
+            # muscle_pd or muscle_act mode
             if self.cfg.normalize_act:
                 actions[:, self.muscle_ind] = 1.0 / (
                     1.0 + torch.exp(-5.0 * (actions[:, self.muscle_ind] - 0.5)).to(self.device)

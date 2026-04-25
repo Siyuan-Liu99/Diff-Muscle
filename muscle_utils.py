@@ -72,7 +72,6 @@ def target_length_to_activations(
     kd_scale: torch.Tensor | float,
 ):
 
-    # 获取设备的device, 在多gpu训练的时候保证device和env对齐
     device = target_length.device
     wp_device = wp.get_device(str(device))
     
@@ -134,70 +133,57 @@ def calculate_vae_muscle_act(
     kd: float = 1.0,
 ) -> torch.Tensor:
     """
-    计算 MuscleVAE 所需的肌肉激活值。
-    
-    通过 PD 控制器计算理想收缩力，并利用 MuJoCo 的 FLV 曲线参数进行逆动力学解算，
-    将目标肌肉长度转换为肌肉激活信号。
-    
+    Compute muscle activations for MuscleVAE control.
+
+    Uses a PD controller to compute the desired contraction force, then solves
+    inverse dynamics via MuJoCo's FLV curve parameters to convert target muscle
+    lengths into activation signals.
+
+    Pipeline:
+        1. PD force:      f_pd = kp * (l_target - l_current) - kd * v_current
+        2. Normalize:     f_normalized = f_pd * F0 / (l_max - l_min)
+        3. Clip:          f_clipped = clamp(f_normalized, -F0, 0)  # muscles can only pull
+        4. Inverse dyn:   activation = (f_clipped - bias) / gain
+
     Args:
-        model: MuJoCo Warp 模型，包含肌肉参数
-        data: MuJoCo Warp 数据，包含当前肌肉状态
-        target_length: 目标肌肉长度 Tensor [batch_size, num_muscles]
-                       由策略输出映射得到
-        kp: PD 控制器的比例增益 (默认: 10.0)
-        kd: PD 控制器的微分增益 (默认: 1.0)
-    
+        model: MuJoCo Warp model containing muscle parameters.
+        data: MuJoCo Warp data with current muscle state.
+        target_length: Target muscle length tensor [batch_size, num_actuators].
+        kp: Proportional gain for PD controller (default: 10.0).
+        kd: Derivative gain for PD controller (default: 1.0).
+
     Returns:
-        activations: 肌肉激活值 Tensor [batch_size, num_muscles]，范围 [0, 1]
-    
-    Notes:
-        计算流程:
-        1. PD 力计算: f_pd = kp * (l_target - l_current) - kd * v_current
-        2. 力归一化: f_normalized = f_pd * F0 / (l_max - l_min)
-        3. 物理裁剪: f_clipped = clamp(f_normalized, -F0, 0)  # 肌肉只能拉不能推
-        4. 逆动力学: activation = (f_clipped - bias) / gain
-           其中 bias 和 gain 由 MuJoCo FLV 曲线参数计算得到
+        activations: Muscle activation tensor [batch_size, num_muscles] in [0, 1].
     """
-    # 获取设备信息，确保多 GPU 训练时 device 对齐
     device = target_length.device
     wp_device = wp.get_device(str(device))
-    
-    # 获取肌肉执行器索引 (dyntype == 4 表示 mjDYN_MUSCLE)
+
+    # dyntype == 4 corresponds to mjDYN_MUSCLE
     muscle_indices = model.actuator_dyntype == 4
-    
-    # ========== Step 1: 提取当前肌肉状态 ==========
-    # 当前肌肉长度 [batch_size, num_muscles]
-    length = data.actuator_length[:, muscle_indices]
-    # 当前肌肉收缩速度 [batch_size, num_muscles]
-    velocity = data.actuator_velocity[:, muscle_indices]
-    # 肌肉长度范围 [num_muscles, 2] (无 batch 维度)
-    lengthrange = model.actuator_lengthrange[muscle_indices]
-    # 最大等长力 F0 [batch_size, num_muscles]
-    F0 = model.actuator_biasprm[:, muscle_indices, 2]
-    
-    # ========== Step 2: PD 力计算 ==========
-    # f_pd = kp * (l_target - l_current) - kd * v_current
-    # 归一化：乘以 F0 / (l_max - l_min) 将位置误差转换为力
+
+    # Step 1: extract current muscle state
+    length = data.actuator_length[:, muscle_indices]          # [batch, num_muscles]
+    velocity = data.actuator_velocity[:, muscle_indices]      # [batch, num_muscles]
+    lengthrange = model.actuator_lengthrange[muscle_indices]  # [num_muscles, 2]
+    F0 = model.actuator_biasprm[:, muscle_indices, 2]         # peak isometric force [batch, num_muscles]
+
+    # Step 2: PD force, normalized to physical units
     length_error = target_length[:, muscle_indices] - length
     f_pd = (kp * length_error - kd * velocity) * F0 / (lengthrange[:, 1] - lengthrange[:, 0])
-    
-    # ========== Step 3: 物理裁剪 ==========
-    # 肌肉只能产生拉力（负值），不能推，且不能超过最大等长力
+
+    # Step 3: muscles can only pull (negative force), clamp to [-F0, 0]
     f_clipped = torch.clamp(f_pd, min=-F0, max=torch.zeros_like(F0))
-    
-    # ========== Step 4: 逆动力学解算 ==========
-    # 获取 FLV 曲线参数
-    prmb = model.actuator_biasprm[:, muscle_indices, :10]  # bias 参数 [batch, num_muscles, 10]
-    prmg = model.actuator_gainprm[:, muscle_indices, :10]  # gain 参数 [batch, num_muscles, 10]
-    acc0 = model.actuator_acc0[muscle_indices].unsqueeze(0).repeat(prmb.shape[0], 1)  # [batch, num_muscles]
-    lengthrange_batched = lengthrange.unsqueeze(0).repeat(prmb.shape[0], 1, 1)  # [batch, num_muscles, 2]
-    
+
+    # Step 4: inverse dynamics via FLV curve (bias/gain computed by Warp kernels)
+    prmb = model.actuator_biasprm[:, muscle_indices, :10]  # [batch, num_muscles, 10]
+    prmg = model.actuator_gainprm[:, muscle_indices, :10]  # [batch, num_muscles, 10]
+    acc0 = model.actuator_acc0[muscle_indices].unsqueeze(0).repeat(prmb.shape[0], 1)
+    lengthrange_batched = lengthrange.unsqueeze(0).repeat(prmb.shape[0], 1, 1)
+
     batch_size = prmb.shape[0]
     num_muscles = prmb.shape[1]
-    
-    # 使用 Warp kernel 计算 bias 和 gain
+
     with wp.ScopedDevice(wp_device):
-        # 计算 bias: 被动力，取决于肌肉长度
         bias_flat = wp.zeros(batch_size * num_muscles, dtype=float, device=wp_device)
         wp.launch(
             muscle_bias_kernel,
@@ -211,8 +197,7 @@ def calculate_vae_muscle_act(
             ],
             device=bias_flat.device,
         )
-        
-        # 计算 gain: 主动力增益，取决于肌肉长度和速度 (FLV 曲线)
+
         gain_flat = wp.zeros(batch_size * num_muscles, dtype=float, device=wp_device)
         wp.launch(
             muscle_gain_kernel,
@@ -227,16 +212,11 @@ def calculate_vae_muscle_act(
             ],
             device=gain_flat.device,
         )
-        
-        # 转换回 PyTorch Tensor 并 reshape
+
         bias = wp.to_torch(bias_flat).reshape(batch_size, num_muscles)
         gain = wp.to_torch(gain_flat).reshape(batch_size, num_muscles)
-        
-        # 确保 gain 为负值以保证数值稳定性（肌肉主动力为负）
-        gain = torch.clamp(gain, max=-1.0)
-        
-        # 逆动力学解算: activation = (f - bias) / gain
-        # 并将激活值限制在 [0, 1] 范围内
+
+        gain = torch.clamp(gain, max=-1.0)  # gain must be negative for numerical stability
         activations = torch.clamp((f_clipped - bias) / gain, min=0.0, max=1.0)
-    
+
     return activations

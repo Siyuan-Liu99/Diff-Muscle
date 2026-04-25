@@ -2,14 +2,13 @@
 
 **Diff-Muscle: Efficient Learning for Musculoskeletal Robotic Table Tennis. [[Paper](https://arxiv.org/abs/2603.08617)]**
 
-![Diff-Muscle](images/diff-muscle.png)
+Diff-Muscle
 
 ---
 
 ## Overview
 
 This repository is the official implementation of our paper [Diff-muscle](https://arxiv.org/abs/2603.08617). We use [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp) for GPU-accelerated training, supporting thousands of parallel environments.
-
 
 ---
 
@@ -123,4 +122,3 @@ If you find this open source release useful, please reference in your paper:
   year={2026}
 }
 ```
-

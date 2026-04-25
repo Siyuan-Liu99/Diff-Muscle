@@ -138,7 +138,7 @@ class Simulation:
 
     # MJWarp model and data.
     with wp.ScopedDevice(self.wp_device):
-      # self._mj_model.opt.enableflags &= ~16 # TODO:disable contact sensor, 不知道会不会有影响
+      # self._mj_model.opt.enableflags &= ~16 
       self._wp_model = mjwarp.put_model(self._mj_model)
       self._wp_model.opt.ls_parallel = cfg.ls_parallel
       self._wp_model.opt.contact_sensor_maxmatch = cfg.contact_sensor_maxmatch
