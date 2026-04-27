@@ -3,7 +3,7 @@
 **Diff-Muscle: Efficient Learning for Musculoskeletal Robotic Table Tennis. [[Paper](https://arxiv.org/abs/2603.08617)]**
 
 <p align="center">
-  <img width="800" height="300" alt="image" src="images\diff-muscle.png" />
+  <img width="800" height="400" alt="image" src="images\diff-muscle.png" />
   <p align="center"><i>Overview of Diff-Muscle</i></p>
 </p>
 
