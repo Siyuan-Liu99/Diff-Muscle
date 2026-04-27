@@ -2,13 +2,16 @@
 
 **Diff-Muscle: Efficient Learning for Musculoskeletal Robotic Table Tennis. [[Paper](https://arxiv.org/abs/2603.08617)]**
 
-Diff-Muscle
-
 ---
 
 ## Overview
 
-This repository is the official implementation of our paper [Diff-muscle](https://arxiv.org/abs/2603.08617). We use [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp) for GPU-accelerated training, supporting thousands of parallel environments.
+This repository is the official implementation of our paper [Diff-muscle](https://arxiv.org/abs/2603.08617) and the First Place solution for 2025 NeurIPS - MyoChallenge: Towards Human Athletic Intelligence Table Tennis Track - Team ActingAI. We use [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp) for GPU-accelerated training, supporting thousands of parallel environments.
+
+<p align="center">
+  <img width="1020" height="467" alt="image" src="images\diff-muscle.png" />
+  <p align="center"><i>Overview of BioSynTT</i></p>
+</p>
 
 ---
 
