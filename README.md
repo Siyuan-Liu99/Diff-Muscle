@@ -10,7 +10,7 @@ This repository is the official implementation of our paper [Diff-muscle](https:
 
 <p align="center">
   <img width="1020" height="467" alt="image" src="images\diff-muscle.png" />
-  <p align="center"><i>Overview of BioSynTT</i></p>
+  <p align="center"><i>Overview of Diff-Muscle</i></p>
 </p>
 
 ---
